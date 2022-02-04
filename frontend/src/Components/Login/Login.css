@@ -2,11 +2,20 @@
 
 .login{
     background-color: #fff;
-    padding: 25px;
+    padding: 40px 25px;
     border-radius:7px;
     box-shadow: 0 30px 60px 0 rgb(0 0 0 / 30%);
     width: 70%;
     height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 450px;
+}
+.login-wrap{
+    width: fit-content;
+    height: fit-content;
+    
 }
 .heading{
     width:100%;
@@ -49,4 +58,11 @@ h4{
 form h6{
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 1px;
+}
+
+@media screen and (min-width:1000px){
+    .login{
+        height:55vh;
+        padding:25px;
+    }
 }
