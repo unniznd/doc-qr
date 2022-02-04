@@ -1,7 +1,11 @@
+import {useNavigate} from 'react-router-dom'
 import React from 'react';
 import './Login.css'
 
 function Login() {
+  const navigate = useNavigate()
+  const handleSignup = () => {navigate('/signup')}
+  
   return (
     <div className="login">
       <div className="login-wrap">
@@ -11,7 +15,7 @@ function Login() {
           <input type="text" className='l-input' placeholder='Username'/> <br/>
           <input type="password" className='l-input' placeholder='Password'/> <br/>
           <input type="submit" className='login-btn' value="LOGIN" />
-          <h6>Forgot Password? | Signup</h6>
+          <h6>Forgot Password? | <a onClick={handleSignup}>Signup</a></h6>
         </form>
       </div>
     </div>

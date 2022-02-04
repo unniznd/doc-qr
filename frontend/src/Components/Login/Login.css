@@ -59,7 +59,10 @@ form h6{
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 1px;
 }
-
+h6 a{
+    text-decoration: none;
+    cursor: pointer;
+}
 @media screen and (min-width:1000px){
     .login{
         height:55vh;
