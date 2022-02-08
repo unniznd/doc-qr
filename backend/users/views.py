@@ -13,23 +13,38 @@ from .models import Profile
 from .serializers import ProfileSerializer
 from .util import get_qr_token, get_qr_code
 
+class QRView(APIView):
+    premission_classes = (IsAuthenticated, OwnProfilePermission)
+    def get(self,request):
+        profile = Profile.objects.filter(user = request.user).first()
+        return Response({"qr":profile.qr.url})
+
+
 class ProfileView(APIView):
     premission_classes = (IsAuthenticated, OwnProfilePermission)
+    
     def get(self, request):
-        profile = Profile.objects.filter(user = request.user).first()
-        return Response({"bio":profile.bio})
+        try:
+            profile = Profile.objects.filter(user = request.user).first()
+            return Response({"bio":profile.bio})
+        except:
+            return Response({"status":"error"},status=status.HTTP_400_BAD_REQUEST) 
+    
+    
     def post(self, request):
-        profile = Profile.objects.filter(user=request.user).first()
-        if request.data.get('bio'):
-            profile.bio = request.data['bio']
+        try:
+            profile = Profile.objects.filter(user=request.user).first()
+            if request.data.get('bio'):
+                profile.bio = request.data['bio']
+                profile.save()
+            
+            profile.qr_token = get_qr_token()
+            profile.qr = get_qr_code(profile=profile)
             profile.save()
-        
-        profile.qr_token = get_qr_token()
-        profile.qr = get_qr_code(profile=profile)
-        profile.save()
 
-        return Response({"qr":profile.qr.url},status=status.HTTP_200_OK)
-        
+            return Response({"status":"success"},status=status.HTTP_200_OK)
+        except:
+            return Response({"status":"error"},status=status.HTTP_400_BAD_REQUEST) 
 
 class CreateProfile(APIView):
     def post(self,request):

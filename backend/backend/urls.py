@@ -12,4 +12,5 @@ urlpatterns = [
     path('login/',user_views.CustomAuthToken.as_view(),name="login"),
     path('logout/',user_views.Logout.as_view(), name="logout"),
     path('profile/',user_views.ProfileView.as_view(),name="profile"),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('profile/qr/',user_views.QRView.as_view(),name="qr-view")
+]
