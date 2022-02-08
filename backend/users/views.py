@@ -48,23 +48,19 @@ class ProfileView(APIView):
 
 class CreateProfile(APIView):
     def post(self,request):
-        profile = ProfileSerializer(data=request.data)
-        if profile.is_valid():
-            try:
-                profile.create(validated_data=request.data)
-
-                user = User.objects.filter(username=request.data['username']).first()
-                token, created = Token.objects.get_or_create(user=user)
-                return Response(
-                    {"token":token.key,"user_id":user.pk},
-                    status=status.HTTP_200_OK
-                )
-            except:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = User.objects.create(username=request.data['username'],password=request.data['password'])
+            user.save()
+            profile = Profile.objects.create(user=user,bio=request.data['bio'])
+            profile.save()
         
-        else:
-            print(profile.errors)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            token, created = Token.objects.get_or_create(user=user)
+            return Response(
+                {"token":token.key,"user_id":user.pk},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response({"error":"Username already exists"},status=status.HTTP_400_BAD_REQUEST)
 
 class CustomAuthToken(ObtainAuthToken):
 
@@ -82,6 +78,7 @@ class CustomAuthToken(ObtainAuthToken):
 class Logout(APIView):
     permission_classes = (IsAuthenticated,) 
     def post(self, request, format=None):
+        
         # simply delete the token to force a login
         request.user.auth_token.delete()
         return Response({"status":"success"},status=status.HTTP_200_OK)

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
+
+
 class OverwriteStorage(FileSystemStorage):
     def _save(self, name, content):
         if self.exists(name):
