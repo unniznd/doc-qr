@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+
+textarea {
+    resize: vertical;
+ }
+
 .Signup{
     background-color: #fff;
     padding: 40px 25px;
