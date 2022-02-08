@@ -5,8 +5,49 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 
+from .models import Profile
 from .serializers import ProfileSerializer
+
+import uuid
+import qrcode
+
+BASE_URL = "http://localhost:8000/"
+
+class OwnProfilePermission(permissions.BasePermission):
+    
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.user == request.user
+
+class ProfileView(APIView):
+    premission_classes = (IsAuthenticated, OwnProfilePermission)
+    def get(self, request):
+        profile = Profile.objects.filter(user = request.user).first()
+        return Response({"bio":profile.bio})
+    # def post(self, request):
+    #     profile = Profile.objects.filter(user=request.user).first()
+    #     if request.data.get('bio'):
+    #         profile.bio = request.data['bio']
+    #         profile.save()
+        
+    #     qr_token = str(uuid.uuid4()).replace('-','')[:20]
+    #     profile.qr_token = qr_token
+    #     profile.save()
+    #     qr_url = BASE_URL+"qr/"+profile.qr_token+"/"
+    #     code = qrcode.QRCode()
+    #     code.add_data(qr_url)
+    #     code.make()
+    
+
+    #     profile.qr = code.make_image()
+    #     profile.save()
+
+    #     return Response({"status":"success"},status=status.HTTP_200_OK)
+
 
 class CreateProfile(APIView):
     def post(self,request):

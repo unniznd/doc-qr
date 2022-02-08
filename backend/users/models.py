@@ -9,5 +9,5 @@ def user_directory_path(instance, filename):
 class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     bio = models.CharField(max_length=10000)
-    token = models.CharField(max_length=16, blank=True)
-    qr = models.FileField(upload_to=user_directory_path, blank=True)
+    qr_token = models.CharField(max_length=16, blank=True)
+    qr = models.ImageField(upload_to=user_directory_path, blank=True)

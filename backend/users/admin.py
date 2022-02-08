@@ -3,4 +3,4 @@ from .models import Profile
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['user','bio','token','qr']
+    list_display = ['user','bio','qr_token','qr']
