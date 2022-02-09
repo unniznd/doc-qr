@@ -5,7 +5,7 @@ import uuid
 import qrcode
 from io import BytesIO
 
-BASE_URL = "http://localhost:8000/"
+BASE_URL = "http://localhost:3000/"
 
 def get_qr_token():
     qr_token = str(uuid.uuid4()).replace('-','')[:20]

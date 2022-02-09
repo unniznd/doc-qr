@@ -10,8 +10,16 @@ from rest_framework.permissions import IsAuthenticated
 
 from .permission import OwnProfilePermission
 from .models import Profile
-from .serializers import ProfileSerializer
 from .util import get_qr_token, get_qr_code
+
+
+class DataView(APIView):
+    def post(self,request):
+        # try:
+            profile = Profile.objects.filter(qr_token = request.data['qr_token']).first()
+            return Response({"bio":profile.bio})
+        # except:
+        #     return Response({"status":"error"},status=status.HTTP_400_BAD_REQUEST) 
 
 class QRView(APIView):
     premission_classes = (IsAuthenticated, OwnProfilePermission)
@@ -47,6 +55,7 @@ class ProfileView(APIView):
             return Response({"status":"error"},status=status.HTTP_400_BAD_REQUEST) 
 
 class CreateProfile(APIView):
+    
     def post(self,request):
         try:
             user = User.objects.create(username=request.data['username'],password=request.data['password'])

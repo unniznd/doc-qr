@@ -1,6 +1,7 @@
 import { saveAs } from 'file-saver'
 import React from 'react';
 import { Navigate } from "react-router-dom";
+import {useNavigate} from 'react-router-dom'
 import { useState } from 'react'
 import './Dashboard.css'
 import axios from 'axios';
@@ -20,7 +21,6 @@ async function getUserBio  () {
     { 'headers': { 'Authorization': "Token "+token } }
   )
   if(response.status == 200){
-    console.log(response.data['bio'])
     return response.data['bio']
   }
   else{
@@ -30,6 +30,7 @@ async function getUserBio  () {
 
 
 function Dashboard() {
+  const navigate = useNavigate()
   const [bio, setBio] = useState('')
   if(bio == ''){
     getUserBio().then((e) => setBio(e))
@@ -39,6 +40,7 @@ function Dashboard() {
     return <Navigate to="/login" />
   }
   const generateQR = async() =>{
+    
     const BASE_URL = "http://localhost:8000"
     const token = await localStorage.getItem("token")
     const response = await axios.post(
@@ -65,10 +67,17 @@ function Dashboard() {
     }
     
   }
-  const handleLogout = ()=>{
+  const handleLogout = async  ()=>{
+    
+    const BASE_URL = "http://localhost:8000"
+    const token = await localStorage.getItem("token") 
     localStorage.removeItem("token")
     localStorage.removeItem("user_id")
-    return <Navigate to="/login" />
+
+    const response = await axios.post(BASE_URL+"/logout/",
+    {"logout":"logout"},
+    { 'headers': { 'Authorization': "Token "+token }})
+    navigate("/login")
   }
 
   return (
