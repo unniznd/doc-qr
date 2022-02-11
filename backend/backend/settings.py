@@ -88,7 +88,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-
+Ji
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -98,7 +98,7 @@ DATABASES = {
          'NAME': secret['name'],
          'USERNAME': secret['username'],
          'PASSWORD': os.environ.get('password'),
-         'HOST': secret['host'],
+         'HOST': os.environ.get('host'),
          'PORT': secret['port']
      }
  }
