@@ -69,7 +69,6 @@ h6{
 }
 @media screen and (min-width:1000px){
     .Signup{
-        height:55vh;
         padding:45px 25px 25px;
     }
 }
